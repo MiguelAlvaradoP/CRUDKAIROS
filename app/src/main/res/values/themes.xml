@@ -1,12 +1,18 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Tema principal de la app -->
-    <style name="Theme.KAIROSCRUD" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Colores personalizados -->
-        <item name="colorPrimary">#4CAF50</item>       <!-- verde -->
-        <item name="colorPrimaryDark">#388E3C</item>  <!-- verde oscuro -->
-        <item name="colorAccent">#6D4C41</item>       <!-- café -->
-        <item name="android:windowBackground">#EDEAE0</item> <!-- fondo café claro -->
+    <style name="Theme.KAIROSCRUD" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- personalizaciones -->
+        <item name="colorPrimary">@color/green</item>
+        <item name="colorPrimaryVariant">@color/dark_green</item>
+        <item name="colorSecondary">@color/brown</item>
     </style>
+    <style name="DialogoVerdeCafe" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="colorPrimary">@color/green</item>
+        <item name="colorPrimaryVariant">@color/dark_green</item>
+        <item name="colorSecondary">@color/brown</item>
+    </style>
+
+
 
 </resources>

@@ -2,56 +2,53 @@ package com.example.kairoscrud
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.widget.ArrayAdapter
-import android.widget.Button
+import android.view.LayoutInflater
 import android.widget.EditText
-import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
-import com.example.kairoscrud.Producto
-import com.example.kairoscrud.ProductoRepository
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var listView: ListView
-    private lateinit var adapter: ArrayAdapter<String>
+    private lateinit var rvProductos: RecyclerView
+    private lateinit var adapter: ProductoAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        listView = findViewById(R.id.listViewProductos)
-        val btnAgregar: Button = findViewById(R.id.btnAgregar)
+        rvProductos = findViewById(R.id.rvProductos)
+        rvProductos.layoutManager = LinearLayoutManager(this)
 
-        actualizarLista()
+        adapter = ProductoAdapter(ProductoRepository.listar(),
+            onEdit = { producto -> mostrarDialogoEditar(producto) },
+            onDelete = { producto ->
+                ProductoRepository.eliminar(producto.id)
+                actualizarLista()
+            })
+        rvProductos.adapter = adapter
 
-        btnAgregar.setOnClickListener {
-            mostrarDialogoAgregar()
-        }
-
-        listView.setOnItemClickListener { _, _, position, _ ->
-            val producto = ProductoRepository.listar()[position]
-            mostrarDialogoEditar(producto)
-        }
+        val btnAgregar: MaterialButton = findViewById(R.id.btnAgregar)
+        btnAgregar.setOnClickListener { mostrarDialogoAgregar() }
     }
 
     private fun actualizarLista() {
-        val nombres = ProductoRepository.listar().map { "${it.nombre} - $${it.precio}" }
-        adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, nombres)
-        listView.adapter = adapter
+        adapter.updateList(ProductoRepository.listar())
     }
 
     private fun mostrarDialogoAgregar() {
-        val dialogView = layoutInflater.inflate(R.layout.dialogo_producto, null)
-        val nombre = dialogView.findViewById<EditText>(R.id.etNombre)
-        val precio = dialogView.findViewById<EditText>(R.id.etPrecio)
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialogo_producto, null)
+        val etNombre = dialogView.findViewById<EditText>(R.id.etNombre)
+        val etPrecio = dialogView.findViewById<EditText>(R.id.etPrecio)
 
         AlertDialog.Builder(this)
             .setTitle("Agregar Producto")
             .setView(dialogView)
             .setPositiveButton("Agregar") { _, _ ->
-                val n = nombre.text.toString()
-                val p = precio.text.toString().toDoubleOrNull() ?: 0.0
-                ProductoRepository.agregar(n, p)
+                val nombre = etNombre.text.toString()
+                val precio = etPrecio.text.toString().toDoubleOrNull() ?: 0.0
+                ProductoRepository.agregar(nombre, precio)
                 actualizarLista()
             }
             .setNegativeButton("Cancelar", null)
@@ -59,20 +56,20 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun mostrarDialogoEditar(producto: Producto) {
-        val dialogView = layoutInflater.inflate(R.layout.dialogo_producto, null)
-        val nombre = dialogView.findViewById<EditText>(R.id.etNombre)
-        val precio = dialogView.findViewById<EditText>(R.id.etPrecio)
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialogo_producto, null)
+        val etNombre = dialogView.findViewById<EditText>(R.id.etNombre)
+        val etPrecio = dialogView.findViewById<EditText>(R.id.etPrecio)
 
-        nombre.setText(producto.nombre)
-        precio.setText(producto.precio.toString())
+        etNombre.setText(producto.nombre)
+        etPrecio.setText(producto.precio.toString())
 
         AlertDialog.Builder(this)
             .setTitle("Editar Producto")
             .setView(dialogView)
             .setPositiveButton("Guardar") { _, _ ->
-                val n = nombre.text.toString()
-                val p = precio.text.toString().toDoubleOrNull() ?: 0.0
-                ProductoRepository.actualizar(producto.id, n, p)
+                val nombre = etNombre.text.toString()
+                val precio = etPrecio.text.toString().toDoubleOrNull() ?: 0.0
+                ProductoRepository.actualizar(producto.id, nombre, precio)
                 actualizarLista()
             }
             .setNeutralButton("Eliminar") { _, _ ->

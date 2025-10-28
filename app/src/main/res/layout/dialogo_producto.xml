@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="20dp"
-    android:background="#EDEAE0"> <!-- fondo café claro -->
+    android:background="@drawable/dialog_background"
+    android:animateLayoutChanges="true">
 
     <TextView
         android:layout_width="wrap_content"
@@ -41,5 +42,4 @@
         android:backgroundTint="#4CAF50"
         android:textColor="#4CAF50"
         android:padding="8dp"/>
-
 </LinearLayout>
