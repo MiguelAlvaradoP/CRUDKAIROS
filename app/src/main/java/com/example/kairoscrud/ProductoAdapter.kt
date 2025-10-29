@@ -28,7 +28,7 @@ class ProductoAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val producto = lista[position]
-        holder.tvNombrePrecio.text = "${producto.nombre} - $${producto.precio}"
+        holder.tvNombrePrecio.text = "${producto.id} - ${producto.nombre} - ${producto.descripcion} - $${producto.precio}"
         holder.btnEditar.setOnClickListener { onEdit(producto) }
         holder.btnEliminar.setOnClickListener { onDelete(producto) }
     }

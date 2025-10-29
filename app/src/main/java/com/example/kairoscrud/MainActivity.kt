@@ -102,6 +102,7 @@ class MainActivity : ComponentActivity() {
     // 🔼--- FIN DEL CAMBIO 3 ---🔼
 }
 
+<<<<<<< HEAD
 // 🔽--- CAMBIO 4: 'LoginScreen' SIMPLIFICADO ---🔽
 // Este Composable ahora solo necesita mostrar el botón de login
 @Composable
@@ -118,6 +119,54 @@ fun LoginScreen(onLoginClicked: () -> Unit) {
         Button(onClick = onLoginClicked) {
             Text("Iniciar Sesión")
         }
+=======
+    private fun mostrarDialogoAgregar() {
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialogo_producto, null)
+        val etNombre = dialogView.findViewById<EditText>(R.id.etNombre)
+        val etDescripcion = dialogView.findViewById<EditText>(R.id.etDescripcion)
+        val etPrecio = dialogView.findViewById<EditText>(R.id.etPrecio)
+
+        AlertDialog.Builder(this)
+            .setTitle("Agregar Producto")
+            .setView(dialogView)
+            .setPositiveButton("Agregar") { _, _ ->
+                val nombre = etNombre.text.toString()
+                val descripcion = etDescripcion.text.toString()
+                val precio = etPrecio.text.toString().toDoubleOrNull() ?: 0.0
+                ProductoRepository.agregar(nombre, descripcion,precio)
+                actualizarLista()
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
+    }
+
+    private fun mostrarDialogoEditar(producto: Producto) {
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialogo_producto, null)
+        val etNombre = dialogView.findViewById<EditText>(R.id.etNombre)
+        val etDescripcion = dialogView.findViewById<EditText>(R.id.etDescripcion)
+        val etPrecio = dialogView.findViewById<EditText>(R.id.etPrecio)
+
+        etNombre.setText(producto.nombre)
+        etDescripcion.setText(producto.descripcion)
+        etPrecio.setText(producto.precio.toString())
+
+        AlertDialog.Builder(this)
+            .setTitle("Editar Producto")
+            .setView(dialogView)
+            .setPositiveButton("Guardar") { _, _ ->
+                val nombre = etNombre.text.toString()
+                val descripcion = etDescripcion.text.toString()
+                val precio = etPrecio.text.toString().toDoubleOrNull() ?: 0.0
+                ProductoRepository.actualizar(producto.id, nombre, descripcion,precio)
+                actualizarLista()
+            }
+            .setNeutralButton("Eliminar") { _, _ ->
+                ProductoRepository.eliminar(producto.id)
+                actualizarLista()
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
+>>>>>>> fa138ebccb95c9348fbad7c9b6110c9932de1a01
     }
 }
 // 🔼--- FIN DEL CAMBIO 4 ---🔼
