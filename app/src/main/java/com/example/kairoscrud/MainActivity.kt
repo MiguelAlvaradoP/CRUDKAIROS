@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity() {
     private fun mostrarDialogoAgregar() {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialogo_producto, null)
         val etNombre = dialogView.findViewById<EditText>(R.id.etNombre)
+        val etDescripcion = dialogView.findViewById<EditText>(R.id.etDescripcion)
         val etPrecio = dialogView.findViewById<EditText>(R.id.etPrecio)
 
         AlertDialog.Builder(this)
@@ -47,8 +48,9 @@ class MainActivity : AppCompatActivity() {
             .setView(dialogView)
             .setPositiveButton("Agregar") { _, _ ->
                 val nombre = etNombre.text.toString()
+                val descripcion = etDescripcion.text.toString()
                 val precio = etPrecio.text.toString().toDoubleOrNull() ?: 0.0
-                ProductoRepository.agregar(nombre, precio)
+                ProductoRepository.agregar(nombre, descripcion,precio)
                 actualizarLista()
             }
             .setNegativeButton("Cancelar", null)
@@ -58,9 +60,11 @@ class MainActivity : AppCompatActivity() {
     private fun mostrarDialogoEditar(producto: Producto) {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialogo_producto, null)
         val etNombre = dialogView.findViewById<EditText>(R.id.etNombre)
+        val etDescripcion = dialogView.findViewById<EditText>(R.id.etDescripcion)
         val etPrecio = dialogView.findViewById<EditText>(R.id.etPrecio)
 
         etNombre.setText(producto.nombre)
+        etDescripcion.setText(producto.descripcion)
         etPrecio.setText(producto.precio.toString())
 
         AlertDialog.Builder(this)
@@ -68,8 +72,9 @@ class MainActivity : AppCompatActivity() {
             .setView(dialogView)
             .setPositiveButton("Guardar") { _, _ ->
                 val nombre = etNombre.text.toString()
+                val descripcion = etDescripcion.text.toString()
                 val precio = etPrecio.text.toString().toDoubleOrNull() ?: 0.0
-                ProductoRepository.actualizar(producto.id, nombre, precio)
+                ProductoRepository.actualizar(producto.id, nombre, descripcion,precio)
                 actualizarLista()
             }
             .setNeutralButton("Eliminar") { _, _ ->
