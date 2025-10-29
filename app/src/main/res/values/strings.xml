@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">KAIROSCRUD</string>
+
+    <string name="com_auth0_domain">dev-zjxrrfutupruimyb.us.auth0.com</string>
+    <string name="com_auth0_client_id">sAGxMf8Tco0tNtPpvhaarafeiBvigsJv</string>
+    <string name="com_auth0_scheme">demo</string>
 </resources>
